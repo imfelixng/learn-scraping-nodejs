@@ -8,7 +8,8 @@ const URL = "https://www.imdb.com/title/tt1477834/";
   let $ = cheerio.load(response);
 
   let titleMovie = $('.title_wrapper > h1').text();
-
+  let ratingValue = $('.ratingValue').text();
   console.log(titleMovie);
+  console.log(ratingValue.trim());
 
 })();
