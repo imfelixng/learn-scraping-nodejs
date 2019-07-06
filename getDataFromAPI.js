@@ -1,19 +1,3 @@
-// const request = require('request-promise');
-// const cheerio = require('cheerio');
-
-// const URL = "https://www.imdb.com/title/tt1477834/";
-
-// (async () => {
-//   const response = await request(URL);
-//   let $ = cheerio.load(response);
-
-//   let titleMovie = $('.title_wrapper > h1').text();
-//   let ratingValue = $('.ratingValue').text();
-//   console.log(titleMovie);
-//   console.log(ratingValue.trim());
-
-// })();
-
 const request = require('request-promise');
 const cheerio = require('cheerio');
 
@@ -31,13 +15,14 @@ const URL = "https://www.imdb.com/title/tt0468569/";
         'referer': 'https://www.imdb.com/poll/Y_692Vc6zh4/results?answer=1&ref_=po_nr',
         'upgrade-insecure-requests': '1',
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'
-      },
-      gzip: true // get data when gzip used
+      }
     }
   );
   let $ = cheerio.load(response);
 
   let titleMovie = $('.title_wrapper > h1').text();
-  let ratingValue = $('.ratingValue strong').text();
+  let ratingValue = $('.ratingValue').text();
+
+  console.log(titleMovie, ratingValue.trim());
 
 })();
