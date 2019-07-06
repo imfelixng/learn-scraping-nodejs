@@ -1,19 +1,26 @@
-const request = require('request-promise');
+const rp = require('request-promise');
 const cheerio = require('cheerio');
-
 const fs = require('fs');
+const request = require('request');
+
 
 const URLS = [
-  "https://www.imdb.com/title/tt0468569/",
-  "https://www.imdb.com/title/tt4154796/"
+  {
+    url: "https://www.imdb.com/title/tt0468569/",
+    id: 'tt0468569'
+  },
+  {
+    url: "https://www.imdb.com/title/tt4154796/",
+    id: 'tt4154796'
+  }
 ];
 
 (async () => {
   const moviesData = [];
   for (let movie of URLS) {
-    const response = await request(
+    const response = await rp(
       {
-        uri: movie,
+        uri: movie.url,
         headers: {
           'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
           'accept-encoding': 'gzip, deflate, br',
@@ -47,8 +54,30 @@ const URLS = [
       releaseDay,
       genres,
     });
+
+    let file = fs.createWriteStream(`${movie.id}.jpg`) // create file
+
+    // request(poster).pipe(file); // create image from url
+
+    try {
+      await new Promise((resolve, reject) => {
+        request(poster).pipe(file)
+        .on('finish', () => {
+          console.log('Success');
+          resolve();
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
+      })
+  
+      debugger;
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
-  fs.writeFileSync('./data.json', JSON.stringify(moviesData), 'utf-8');
+  // fs.writeFileSync('./data.json', JSON.stringify(moviesData), 'utf-8');
 
 })();
